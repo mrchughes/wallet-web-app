@@ -1,0 +1,84 @@
+openapi: 3.0.3
+info:
+  title: Wallet Web App
+  version: 1.0.0
+paths:
+  /login:
+    post:
+      summary: Authenticate using Solid OIDC
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+  /did/create:
+    post:
+      summary: Create new DID:ION identity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                passphrase:
+                  type: string
+      responses:
+        '201':
+          description: DID created
+  /did/sign:
+    post:
+      summary: Sign data with DID:ION
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: string
+                passphrase:
+                  type: string
+      responses:
+        '200':
+          description: Signed data
+  /pds/credentials:
+    get:
+      summary: List all credentials from PDS
+      responses:
+        '200':
+          description: List of credentials
+  /pds/permissions:
+    get:
+      summary: Get current permissions
+      responses:
+        '200':
+          description: List of current permissions
+    post:
+      summary: Set permissions for a credential
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                credentialId:
+                  type: string
+                accessors:
+                  type: array
+                  items:
+                    type: string
+                actions:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Permissions updated
