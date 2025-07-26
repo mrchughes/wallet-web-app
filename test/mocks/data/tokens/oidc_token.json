@@ -1,0 +1,10 @@
+{
+    "webid": "https://user.example.org/profile/card#me",
+    "iss": "http://localhost:3004",
+    "sub": "user-123",
+    "aud": "wallet-web-app",
+    "scope": "openid profile webid",
+    "exp": 1722000000,
+    "iat": 1721996400,
+    "jti": "token-123"
+}

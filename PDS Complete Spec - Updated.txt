@@ -1,3 +1,6 @@
+YOU ARE THE SWALLET_WEB_APP IMPLEMENTER.  IMPLEMENT THIS SERVICE AND NO OTHER
+
+
 Solid VC Microservices Prototype Specification
 
 📄 Prototype Context Summary for Suppliers

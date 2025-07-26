@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  wallet-web-app:
+    build: .
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - MOCK_SERVICES=true
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - mock-services
+
+  mock-services:
+    build:
+      context: .
+      dockerfile: test/mocks/Dockerfile
+    ports:
+      - "3002:3002" # Mock DID:ION
+      - "3003:3003" # Mock PDS
+      - "3004:3004" # Mock OIDC
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./test/mocks/data:/app/data
+
+volumes:
+  data:
