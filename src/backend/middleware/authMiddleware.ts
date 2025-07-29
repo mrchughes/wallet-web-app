@@ -12,13 +12,20 @@ export interface AuthenticatedRequest extends Request {
 
 export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
+        let token: string;
+        // Check Authorization header first
         const authHeader = req.headers.authorization;
-
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            token = authHeader.substring(7);
+        }
+        // If not in header, check for token in cookies
+        else if (req.cookies && req.cookies.auth_token) {
+            token = req.cookies.auth_token;
+        }
+        // No token found
+        else {
             throw new AppError('No token provided', 401);
         }
-
-        const token = authHeader.substring(7);
 
         if (!process.env.JWT_SECRET) {
             throw new AppError('JWT secret not configured', 500);

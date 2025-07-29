@@ -33,7 +33,7 @@ export class SolidOidcService {
             }
 
             // Verify and extract WebID from token
-            const tokenData = await this.verifyToken(tokenResponse.access_token);
+            const tokenData = await this.verifyTokenAsync(tokenResponse.access_token);
 
             if (!tokenData.webid) {
                 return {
@@ -61,7 +61,7 @@ export class SolidOidcService {
         }
     }
 
-    async verifyToken(token: string): Promise<SolidOidcToken> {
+    async verifyTokenAsync(token: string): Promise<SolidOidcToken> {
         try {
             // In mock mode, decode without verification
             if (process.env.MOCK_SERVICES === 'true') {
@@ -86,6 +86,21 @@ export class SolidOidcService {
             return decoded.payload as SolidOidcToken;
         } catch (error) {
             throw new Error('Token verification failed');
+        }
+    }
+
+    verifyToken(token: string): { valid: boolean; webid?: string; error?: string } {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as SolidOidcToken;
+            return {
+                valid: true,
+                webid: decoded.webid
+            };
+        } catch (error: any) {
+            return {
+                valid: false,
+                error: error.message
+            };
         }
     }
 

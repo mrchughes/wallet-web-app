@@ -218,7 +218,7 @@ export class DIDIonService {
 
         const key = crypto.pbkdf2Sync(passphrase, salt, 100000, 32, 'sha256');
 
-        const cipher = crypto.createCipher(algorithm, key);
+        const cipher = crypto.createCipheriv(algorithm, key, iv);
         let encrypted = cipher.update(privateKey, 'utf8', 'hex');
         encrypted += cipher.final('hex');
 
@@ -236,8 +236,9 @@ export class DIDIonService {
     private decryptPrivateKey(encryptedData: string, passphrase: string): string {
         const data = JSON.parse(encryptedData);
         const key = crypto.pbkdf2Sync(passphrase, Buffer.from(data.salt, 'hex'), 100000, 32, 'sha256');
+        const iv = Buffer.from(data.iv, 'hex');
 
-        const decipher = crypto.createDecipher(data.algorithm, key);
+        const decipher = crypto.createDecipheriv(data.algorithm, key, iv);
         decipher.setAuthTag(Buffer.from(data.authTag, 'hex'));
 
         let decrypted = decipher.update(data.encrypted, 'hex', 'utf8');
